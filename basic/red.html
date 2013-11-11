@@ -1,0 +1,64 @@
+<!doctype html>
+<head> </head>
+<body>
+
+<video autoplay id="vid" style="display:none;"></video>
+<canvas id="canvas" width="640" height="480" style="border:1px solid #d3d3d3;"></canvas><br>
+
+<button onclick="snapshot()">Take Picture</button>
+
+<script type="text/javascript">
+
+    var video = document.querySelector("#vid");
+    var canvas = document.querySelector('#canvas');
+
+    var ctx = canvas.getContext('2d');
+    var localMediaStream = null;
+
+    var onCameraFail = function (e) {
+        console.log('Camera did not work.', e);
+    };
+
+    function snapshot() {
+        if (localMediaStream) {
+            ctx.drawImage(video, 0, 0);
+            imgData = ctx.getImageData(0, 0, 640, 480);
+            var pixels = imgData.data;
+            var r,g,b,avg;
+
+            var tmpX = 640/2;
+            var tmpY = 480/2;
+            var WIDTH = 640;
+
+            var colorOffset = {red: 0, green: 1, blue: 2};
+
+            rNew = imgData.data [ (3 * tmpY * WIDTH) + (3 * tmpX) + colorOffset.red ];
+
+            gNew = imgData.data [ (3 * tmpY * WIDTH) + (3 * tmpX) + colorOffset.green];
+
+            bNew = imgData.data [ (3 * tmpY * WIDTH) + (3 * tmpX) + colorOffset.blue];
+
+            var all = (rNew + gNew + bNew)/3
+
+            console.log(all);
+
+        }
+
+        
+
+     
+    }
+
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+    
+    window.URL = window.URL || window.webkitURL;
+    navigator.getUserMedia({video:true}, function (stream) {
+        video.src = window.URL.createObjectURL(stream);
+        localMediaStream = stream;
+    }, onCameraFail);
+
+
+
+</script>
+</body>
+</html>
