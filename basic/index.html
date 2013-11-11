@@ -8,7 +8,7 @@
 <button onclick="snapshot()">Take Picture</button>
 
 <script type="text/javascript">
-
+//http://www.scottpreston.com/articles/1442.php
     var video = document.querySelector("#vid");
     var canvas = document.querySelector('#canvas');
 
@@ -21,8 +21,28 @@
 
     function snapshot() {
         if (localMediaStream) {
+            var colorSum = 0;
             ctx.drawImage(video, 0, 0);
+            imgData = ctx.getImageData(0, 0, 640, 480);
+            var data = imgData.data;
+            var r,g,b,avg;
+
+        //http://stackoverflow.com/questions/13762864/image-dark-light-detection-client-sided-script
+ for(var x = 0, len = data.length; x < len; x+=4) {
+                r = data[x];
+                g = data[x+1];
+                b = data[x+2];
+
+                avg = Math.floor((r+g+b)/3);
+                colorSum += avg;
+            }
+
+        var brightness = Math.floor(colorSum / (this.width*this.height));
+        console.log(brightness);
+
         }
+
+        
     }
 
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -34,7 +54,7 @@
     }, onCameraFail);
 
 
-//hi
+
 </script>
 </body>
 </html>
