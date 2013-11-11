@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<img id="canvasSource" src="canvas.png" alt="Canvas Source" />
+
+<canvas id="area" width="300" height="150"></canvas>
+
+<script>
+
+
+window.onload = function() {
+	var c=document.getElementById("area");
+	var ctx=c.getContext("2d");
+	var image = document.getElementById("canvasSource");
+	ctx.drawImage(image, 0, 0);
+
+	var imgData=ctx.getImageData(0,0,300,150);
+	ctx.putImageData(imgData,0,0);
+};
+</script>
+
+</body>
+</html>
